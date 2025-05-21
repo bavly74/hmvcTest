@@ -4,8 +4,12 @@ namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
+use Modules\Admin\Http\Requests\CreateUserRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -14,7 +18,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('admin::users.index');
+
+        return view('admin::users.index',['users'=>User::all()]);
     }
 
     /**
@@ -33,11 +38,19 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(CreateUserRequest $request) {
+        $data= $request->validated();
+       $user = User::create([
+            'name'=>$data->name ,
+            'email'=>$data->email ,
+            'password'=>Hash::make($data->password)
+        ]) ;
 
-    /**
-     * Show the specified resource.
-     */
+        $user->roles()->attach($data->role) ;
+        return redirect()->back()->with('success','user created successfully !') ;
+    }
+
+
     public function show($id)
     {
         return view('admin::users.show');
@@ -48,13 +61,38 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('admin::users.edit');
+        if (Auth::User()->id != $id && !Gate::allows('is_admin')) {
+            abort(403);
+        } else {
+            $user = User::with('roles')->findOrFail($id) ;
+            $roles = Role::all() ;
+            return view('admin::users.edit',compact('user','roles'));
+        }
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(Request $request, $id) {
+
+    $user = User::findOrFail($id) ;
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'roles' => 'array', // optional if user can have multiple roles
+        'roles.*' => 'exists:roles,id',
+    ]);
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+    ]);
+
+    // Sync roles
+    $user->roles()->sync($request->roles ?? []);
+
+    return redirect()->back()->with('success', 'User updated successfully!');
+    }
 
     /**
      * Remove the specified resource from storage.

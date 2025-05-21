@@ -3,6 +3,11 @@
 @section('title', 'Create User')
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 <div class="container mt-4">
     <h2>Create New User</h2>
 
