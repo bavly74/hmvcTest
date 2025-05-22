@@ -80,7 +80,7 @@ class UserController extends Controller
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email,' . $user->id,
-        'roles' => 'array', // optional if user can have multiple roles
+        'roles' => 'array',
         'roles.*' => 'exists:roles,id',
     ]);
     $user->update([
@@ -97,5 +97,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy($id) {
+        $user = User::findOrFail($id) ;
+        $user->roles()->detach() ;
+        $user->delete() ;
+        return redirect()->back()->with('success', 'user deleted successfully') ;
+    }
 }
