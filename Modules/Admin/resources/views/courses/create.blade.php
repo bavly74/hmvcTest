@@ -46,7 +46,11 @@
 
         <div class="mb-3">
             <label for="company" class="form-label">Company</label>
-            <input type="text" name="company" class="form-control" value="{{ old('company') }}" required>
+            <select name="company" class="form-control" required>
+                @foreach ($companies as $company )
+                    <option value="{{ $company->id }}">{{ $company->name }}</option>
+                @endforeach
+            </select>
         </div>
 
         <div class="mb-3">

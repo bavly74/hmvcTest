@@ -41,12 +41,12 @@ class UserController extends Controller
     public function store(CreateUserRequest $request) {
         $data= $request->validated();
        $user = User::create([
-            'name'=>$data->name ,
-            'email'=>$data->email ,
-            'password'=>Hash::make($data->password)
+            'name'=>$data['name'] ,
+            'email'=>$data['email'] ,
+            'password'=>Hash::make($data['password'])
         ]) ;
 
-        $user->roles()->attach($data->role) ;
+        $user->roles()->attach($data['role']) ;
         return redirect()->back()->with('success','user created successfully !') ;
     }
 

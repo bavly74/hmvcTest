@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Course;
+use Modules\Company\Models\Company;
+
+
 class CourseController extends Controller
 {
 
@@ -24,7 +27,8 @@ class CourseController extends Controller
         if( !Gate::allows('is_admin') ){
         abort(403);
         }
-        return view('admin::courses.create');
+        $companies= Company::all() ;
+        return view('admin::courses.create',compact('companies'));
     }
 
 
@@ -38,7 +42,7 @@ class CourseController extends Controller
             'start_date'=>$request->start_date ,
             'end_date'=>$request->end_date ,
             'instructor'=>$request->instructor ,
-            'company'=>$request->company ,
+            'company_id'=>$request->company ,
             'type'=>$request->type ,
             'level'=>$request->level ,
             'students_number'=>$request->students_number ,
@@ -57,11 +61,12 @@ class CourseController extends Controller
 
     public function edit($id)
     {
+        $companies= Company::all() ;
         $course= Course::findOrFail($id);
         if(!Gate::allows('is_admin')) {
             abort(403);
         }
-        return view('admin::courses.edit',['course'=>$course]);
+        return view('admin::courses.edit',['course'=>$course,'companies'=>$companies]);
     }
 
 
@@ -76,7 +81,7 @@ class CourseController extends Controller
             'start_date'=>$request->start_date ,
             'end_date'=>$request->end_date ,
             'instructor'=>$request->instructor ,
-            'company'=>$request->company ,
+            'company_id'=>$request->company ,
             'type'=>$request->type ,
             'level'=>$request->level ,
             'students_number'=>$request->students_number ,

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('start_date') ;
             $table->date('end_date') ;
             $table->string('instructor');
-            $table->string('company');
+            $table->foreignId('company_id')->constrained('companies');
             $table->string('type');
             $table->string('level');
             $table->string('students_number');

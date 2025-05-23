@@ -11,7 +11,7 @@
     @can('is_admin')<a href="{{route('courses.create')}}" class="btn btn-primary" >Add</a>@endcan
     {{-- Table --}}
     <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle">
+        <table class="table align-middle table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
@@ -34,13 +34,13 @@
                         <td>{{ $course->start_date }}</td>
                         <td>{{ $course->end_date }}</td>
                         <td>{{ $course->instructor }}</td>
-                        <td>{{ $course->company }}</td>
+                        <td>{{ $course->company->name }}</td>
                         <td>{{ $course->type }}</td>
                         <td>{{ $course->level }}</td>
                         <td>{{ $course->students_number }}</td>
                         <td>
                             <!-- gate  -->
-                        @can('is_Admin')<a href="{{ route('courses.edit', $course->id) }}" class="btn btn-sm btn-warning">Edit</a> @endcan
+                        @can('is_admin')<a href="{{ route('courses.edit', $course->id) }}" class="btn btn-sm btn-warning">Edit</a> @endcan
 
                         <!-- gate with policy  -->
                         @can('delete',$course)    <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Are you sure to delete this course?')">

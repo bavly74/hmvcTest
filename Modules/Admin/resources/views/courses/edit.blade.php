@@ -44,10 +44,13 @@
             <label class="form-label">Instructor</label>
             <input type="text" name="instructor" class="form-control" value="{{ old('instructor', $course->instructor) }}" required>
         </div>
-
         <div class="mb-3">
-            <label class="form-label">Company</label>
-            <input type="text" name="company" class="form-control" value="{{ old('company', $course->company) }}" required>
+            <label for="company" class="form-label">Company</label>
+            <select name="company" class="form-control" required>
+                @foreach ($companies as $company )
+                    <option value="{{ $company->id }}" {{ $course->company_id==$company->id ?'selected':'' }} >{{ $company->name }}</option>
+                @endforeach
+            </select>
         </div>
 
         <div class="mb-3">

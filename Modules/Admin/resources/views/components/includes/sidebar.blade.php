@@ -38,7 +38,11 @@
                 <i class="bi bi-file-text"></i> Courses
             </a>
         </li>
-
+        <li class="nav-item mb-2">
+            <a href="{{route('companies.index')}}" class="nav-link text-white">
+                <i class="bi bi-file-text"></i> Companies
+            </a>
+        </li>
         <li class="nav-item mb-2">
             <a href="#" class="nav-link text-white">
                 <i class="bi bi-gear"></i> Settings

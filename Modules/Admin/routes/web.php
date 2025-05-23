@@ -5,6 +5,8 @@ use Modules\Admin\Http\Controllers\AdminController;
 use Modules\Admin\Http\Controllers\CourseController;
 use Modules\Admin\Http\Controllers\PostController;
 use Modules\Admin\Http\Controllers\UserController;
+use Modules\Admin\Http\Controllers\CompanyController;
+
 
 
 Route::prefix('dashboard')->middleware(['auth','verified'])->group(function () {
@@ -38,6 +40,16 @@ Route::prefix('dashboard')->middleware(['auth','verified'])->group(function () {
         Route::get('/edit/{id}',[CourseController::class,'edit'])->name('courses.edit');
         Route::put('/update/{id}',[CourseController::class,'update'])->name('courses.update');
         Route::delete('/destroy/{id}',[CourseController::class,'destroy'])->name('courses.destroy');
+    });
+
+    //CRUD companies
+    Route::prefix('companies')->group(function(){
+        Route::get('/',[CompanyController::class,'index'])->name('companies.index');
+        Route::get('/create',[CompanyController::class,'create'])->name('companies.create');
+        Route::post('/store',[CompanyController::class,'store'])->name('companies.store');
+        Route::get('/edit/{id}',[CompanyController::class,'edit'])->name('companies.edit');
+        Route::put('/update/{id}',[CompanyController::class,'update'])->name('companies.update');
+        Route::delete('/destroy/{id}',[CompanyController::class,'destroy'])->name('companies.destroy');
     });
 
 });

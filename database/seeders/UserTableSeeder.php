@@ -17,6 +17,7 @@ class UserTableSeeder extends Seeder
     {
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $userRole = Role::firstOrCreate(['name' => 'user']);
+        $studentRole = Role::firstOrCreate(['name' => 'student']);
 
         $admin = User::create([
             'name' => 'Admin User',
@@ -32,5 +33,11 @@ class UserTableSeeder extends Seeder
         ]);
         $user->roles()->attach($userRole->id);
 
+        $student= User::create([
+            'name' => 'student',
+            'email' => 'std@example.com',
+            'password' => Hash::make('123456789'),
+        ]);
+        $student->roles()->attach($studentRole);
     }
 }
