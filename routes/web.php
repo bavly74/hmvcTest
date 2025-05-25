@@ -4,7 +4,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
-
+use App\Http\Controllers\FatoorahController;
+use App\Http\Controllers\MyFatoorahController;
 Route::get('/',[HomeController::class,'index']);
 
 Route::get('/dashboard', function () {
@@ -31,7 +32,13 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('course')->middleware('auth','can:is_student')->group(function(){
     Route::post('/apply/{id}',[HomeController::class,'applyForCourse'])->name('course.apply') ;
+    // Route::get('myfatoorah-checkout',[MyFatoorahController::class,'checkout'])->name('myfatoorah.checkout');
+    Route::get('pay',[FatoorahController::class,'pay'])->name('myfatoorah.pay');
 
+
+    Route::get('myfatoorah-callback',function(){return "done";})->name('myfatoorah.callback');
+    Route::get('myfatoorah-error',function(){return "error";})->name('myfatoorah.error');
 });
+
 
 require __DIR__.'/auth.php';

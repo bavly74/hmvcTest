@@ -55,9 +55,14 @@
 
 
         @include('student::includes.header')
-        @include('student::includes.sidebar')
-        @yield('content')
+                <div class="d-flex">
+                    @include('student::includes.sidebar')
+                    <div class="flex-grow-1 p-3">
+                        @yield('content')
+                    </div>
+                </div>
         @include('student::includes.footer')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
     </body>

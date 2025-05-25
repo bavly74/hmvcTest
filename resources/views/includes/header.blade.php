@@ -9,9 +9,15 @@
                 </li>
 
                 @auth
+                    @can('is_admin')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
                     </li>
+                    @elsecan('is_student')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('student') }}">Dashboard</a>
+                    </li>
+                    @endcan
                     <li class="nav-item">
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf

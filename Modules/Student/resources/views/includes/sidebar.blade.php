@@ -1,6 +1,6 @@
     <div class="sidebar">
         <a href="#">Dashboard</a>
-        <a href="#">My Courses</a>
+        <a href="{{ route('courses.index') }}">My Courses</a>
         <a href="#">Profile</a>
         <a href="{{ route('logout') }}"
            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
