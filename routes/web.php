@@ -5,8 +5,33 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\FatoorahController;
-use App\Http\Controllers\MyFatoorahController;
-Route::get('/',[HomeController::class,'index']);
+
+use Illuminate\Support\Facades\DB;
+
+Route::get('/',[HomeController::class,'index'])->name('home');
+
+Route::get('/addFile',function(){
+    return view('addFile') ;
+})->name('addFile');
+Route::post('/storeFile',[HomeController::class,'storeFile'])->name('storeFile');
+
+// Query Builder Joins /////
+Route::get('/queryBuilderJoinInner',function(){
+    $usersPosts = DB::table('users')
+    ->join('posts','users.id','=','posts.created_by')
+    ->select('users.name','posts.title') // users.* // posts.*  (return all columns)
+    ->get() ;
+    dd($usersPosts) ;
+})->name('queryBuilderJoinInner');
+
+Route::get('/queryBuilderJoinRight',function(){
+    $usersPosts = DB::table('posts')
+    ->join('users','users.id','=','posts.created_by')
+    ->select('posts.title','users.name') // users.* // posts.*  (return all columns)
+    ->get() ;
+    dd($usersPosts) ;
+})->name('queryBuilderJoinRight');
+// End Query Builder Joins /////
 
 Route::get('/dashboard', function () {
     if (! (Gate::allows('is_admin') || Gate::allows('is_user'))) {
@@ -31,9 +56,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('course')->middleware('auth','can:is_student')->group(function(){
-    Route::post('/apply/{id}',[HomeController::class,'applyForCourse'])->name('course.apply') ;
-    // Route::get('myfatoorah-checkout',[MyFatoorahController::class,'checkout'])->name('myfatoorah.checkout');
-    Route::get('pay',[FatoorahController::class,'pay'])->name('myfatoorah.pay');
+    Route::get('/apply/{id}',[HomeController::class,'apply'])->name('course.apply') ;
+    Route::get('/applyForCourse/{id}',[HomeController::class,'applyForCourse'])->name('course.applyForCourse') ;
+
+    Route::get('fatoorah/pay',[FatoorahController::class,'pay'])->name('myfatoorah.pay');
+    Route::get('paypal/pay',[\App\Http\Controllers\PayPalController::class,'pay'])->name('paypal.pay');
 
 
     Route::get('myfatoorah-callback',function(){return "done";})->name('myfatoorah.callback');

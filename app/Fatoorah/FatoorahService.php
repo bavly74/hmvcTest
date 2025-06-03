@@ -23,16 +23,17 @@ class FatoorahService{
             return false ;
         }
         $response =$this->request_client->send($request,[
-            'json'=>$data
+            'json'=>$data ,
+            'verify' => true
         ]) ;
         if($response->getStatusCode()!=200){
             return false;
         }
-        return $response = json_decode($response->getBody(),true) ;
+         $response = json_decode($response->getBody(),true) ;
 
-        //  if ($response['IsSuccess'] && isset($response['Data']['InvoiceURL'])) {
-        //         return redirect()->away($response['Data']['InvoiceURL']);
-        //     }
+          if ($response['IsSuccess'] && isset($response['Data']['InvoiceURL'])) {
+                 return redirect()->away($response['Data']['InvoiceURL']);
+             }
 
     }
 

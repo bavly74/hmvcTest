@@ -34,7 +34,7 @@
         </li>
 
         <li class="nav-item mb-2">
-            <a href="{{route('courses.index')}}" class="nav-link text-white">
+            <a href="{{route('admin.courses.index')}}" class="nav-link text-white">
                 <i class="bi bi-file-text"></i> Courses
             </a>
         </li>

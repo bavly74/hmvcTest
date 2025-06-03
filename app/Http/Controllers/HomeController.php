@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Course ;
 use App\Http\Controllers\FatoorahController ;
 use App\Fatoorah\FatoorahService ;
+use Illuminate\Support\Str;
 class HomeController extends Controller
 {
     private $fatoorah_service ;
@@ -18,7 +19,11 @@ class HomeController extends Controller
         $courses = Course::with('company')->get() ;
         return view('index',compact('courses'));
     }
+    public function apply($id)
+    {
+       return view('course.paybtns',compact('id'));
 
+    }
     public function applyForCourse(Request $request , $id) {
         $user = auth()->user() ;
         $course = Course::findOrFail($id) ;
@@ -34,10 +39,19 @@ class HomeController extends Controller
             'Language' =>'ar' ,
             'MobileCountryCode'=>'+20'
         ];
-       return $this->fatoorah_service->sendPayment($data) ;
+        return  $this->fatoorah_service->sendPayment($data) ;
+    }
 
+    public function storeFile(Request $request) {
+        $request->validate([
+            'file'=>'required|image|mimes:jpg,jpeg,png|max:3000'
+        ]);
+        $file = $request->file('file') ;
+        $extension = $file->getClientOriginalExtension() ;
+        $fileName = Str::random().'.'.$extension ;
+        $path = $file->storeAs('/images',$fileName,'public') ;
+         return redirect()->back()->with('success', 'file uploaded') ;
 
-        // return redirect()->back()->with('success','you have applied successfully') ;
     }
 
 }

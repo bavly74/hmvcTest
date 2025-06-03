@@ -34,7 +34,7 @@ Route::prefix('dashboard')->middleware(['auth','verified'])->group(function () {
 
     //CRUD courses
     Route::prefix('courses')->group(function(){
-        Route::get('/',[CourseController::class,'index'])->name('courses.index');
+        Route::get('/',[CourseController::class,'index'])->name('admin.courses.index');
         Route::get('/create',[CourseController::class,'create'])->name('courses.create');
         Route::post('/store',[CourseController::class,'store'])->name('courses.store');
         Route::get('/edit/{id}',[CourseController::class,'edit'])->name('courses.edit');
