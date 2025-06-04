@@ -4,8 +4,10 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\FatoorahController;
-
+use App\Mail\SendMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 Route::get('/',[HomeController::class,'index'])->name('home');
@@ -32,6 +34,46 @@ Route::get('/queryBuilderJoinRight',function(){
     dd($usersPosts) ;
 })->name('queryBuilderJoinRight');
 // End Query Builder Joins /////
+
+
+// Send Mail Text/////
+Route::get('/send-mail-text',function(){
+    return view('send-mail-text') ;
+}) ;
+
+Route::post('send-mail',function(Request $request){
+    Mail::raw($request->message, function ($message) use ($request) {
+        $message->from('john@johndoe.com', 'John Doe');
+        $message->sender('john@johndoe.com', 'John Doe');
+        $message->to($request->email);
+        $message->subject('Laravel Test Mail');
+        // $message->cc('john@johndoe.com', 'John Doe');
+        // $message->bcc('john@johndoe.com', 'John Doe');
+        // $message->replyTo('john@johndoe.com', 'John Doe');
+        // $message->priority(3);
+        // $message->attach('pathToFile');
+    });
+
+    dd('Email Sent !') ;
+})->name('send-mail.text') ;
+// End Send Mail Text/////
+
+
+// Send Mail HTML View/////
+Route::get('/send-mail-view',function(){
+    return view('send-mail-view') ;
+}) ;
+
+Route::post('/send-mail-view',function(Request $request){
+    $data = collect($request->all());
+    //   return $data = $request->all();
+
+    Mail::to($data['email'])->send(new SendMail($data)) ;
+    dd('Email Sent !') ;
+})->name('send-mail.view') ;
+// End Send Mail HTML View/////
+
+
 
 Route::get('/dashboard', function () {
     if (! (Gate::allows('is_admin') || Gate::allows('is_user'))) {
